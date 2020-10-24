@@ -4,6 +4,7 @@ const connectDB = require("./config/db")
 const productRoutes = require("./routes/productRoutes")
 const { notFound, errorHandler } = require("./middleware/errorMiddleware")
 const userRoutes = require("./routes/userRoutes")
+const orderRoutes = require("./routes/orderRoutes")
 
 require("dotenv/config")
 
@@ -20,6 +21,9 @@ app.use("/api/products", productRoutes)
 
 //User routes
 app.use("/api/users", userRoutes )
+
+//Order routes
+app.use("/api/orders", orderRoutes)
 
 //Not found middleware
 app.use(notFound)

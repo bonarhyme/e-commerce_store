@@ -18,3 +18,28 @@ h2{
   font-size: 1.3rem;
   padding: 0.5rem 0;
 }
+
+@media only screen and (min-width: 768px) and (max-width: 1200px){
+  .product-page-grid-cont{
+    display: grid;
+    grid-template-areas:
+    "section1 section2"
+    "section1 section3";
+  }
+
+  .product-page-section{
+    min-width: 350px;
+  }
+
+  .product-page-section:nth-child(1){
+    grid-area: section1;
+  }
+
+  .product-page-section:nth-child(2){
+    grid-area: section2;
+  }
+  .product-page-section:nth-child(3){
+     margin: 20px 0 0 50%;
+    grid-area: section2;
+  }
+}

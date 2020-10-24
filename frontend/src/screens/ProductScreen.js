@@ -26,35 +26,17 @@ const ProductScreen = ({ history, match }) => {
         history.push(`/cart/${match.params.id}?qty=${qty}`)
     }
 
-    //Component level state
-    // const [qty, setQty] = useState(1)
-
-    // // app level state from redux
-    // const productDetails = useSelector((state) => state.productDetails);
-    // const { loading, product, error } = productDetails
-
-    // //dispatch actions
-    // const dispatch = useDispatch()
-
-    // useEffect(() => {
-    //     dispatch(listProductDetails(match.params.id))
-    // }, [dispatch, match.params.id])
-
-    // const addToCartHandler = () => {
-    //     dispatch(addToCart(match.params.id, qty))
-    //     history.push("/cart")
-    // }
     return (
     <>
         <Link to="/" >
           <Button className="btn btn-light my-3">Go Back</Button>
             </Link>
             { loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
-             <Row>
-                <Col md={6}>
+             <Row className="product-page-grid-cont" >
+                <Col md={6} className="product-page-section">
                     <Image src={product.image} alt={product.name} fluid />
                 </Col>
-                <Col md={3}>
+                <Col md={3} className="product-page-section">
                     <ListGroupItem variant="flush" >
                         <h3>{product.name}</h3>
                     </ListGroupItem>
@@ -68,7 +50,7 @@ const ProductScreen = ({ history, match }) => {
                         Description: {product.description}
                     </ListGroupItem>
                     </Col>
-                    <Col md={3}>
+                    <Col md={3} className="product-page-section">
                         <Card>
                             <ListGroup variant="flush">
                                 <ListGroupItem>
@@ -84,7 +66,7 @@ const ProductScreen = ({ history, match }) => {
                                     </Row>
                                 </ListGroupItem>
                                 <ListGroupItem>
-                                    <Row>
+                                    <Row >
                                         <Col>
                                             Status:
                                         </Col>
