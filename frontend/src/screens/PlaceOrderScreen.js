@@ -4,7 +4,6 @@ import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import Message from "../components/Message"
 import CheckoutSteps from '../components/CheckoutSteps'
-// import { saveShippingAddress } from '../actions/cartActions'
 import { createOrder } from "../actions/orderActions"
 
 const PlaceOrderScreen = ({ history }) => {
@@ -129,7 +128,7 @@ const PlaceOrderScreen = ({ history }) => {
                                 {error && <Message variant="danger">{error}</Message>}
                             </ListGroup.Item>
                             <ListGroup.Item>
-                                <Button tupe="button"  className="btn-block" disabled={cart.cartItems === 0} onClick={placeOrderHandler} >Place Order
+                                <Button type="button"  className="btn-block" disabled={cart.cartItems === 0} onClick={placeOrderHandler} >Place Order
                                 </Button>
                             </ListGroup.Item>
                         </ListGroup>

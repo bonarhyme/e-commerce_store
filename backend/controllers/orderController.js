@@ -21,7 +21,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     throw new Error('No order items')
     return
   } else {
-    const order = await new Order({
+    const order = new Order({
       orderItems,
       user: req.user._id,
       shippingAddress,
@@ -43,19 +43,53 @@ module.exports = addOrderItems
 
 
 // @desc    get order by Id
-// @route   POST /api/orders/;id
+// @route   GET /api/orders/:id
 // @access  Private
 const getOrderById = asyncHandler(async (req, res) => {
-  //populate is used to fetch  a certaain collection associated to a particular userId or OnjectId in the database. otice the space in the data you try to populate
-  const order = await (await Order.findById(req.params.id)).populate("user", "name email")
 
-  if(order){
+  //populate is used to fetch  a certaain collection associated to a particular userId or OnjectId in the database. otice the space in the data you try to populate
+
+  const order = await Order.findById(req.params.id).populate("user", "name email")
+
+  if (order) {
+    console.log(req.para)
     res.json(order)
   } else {
     res.status(404)
-    throw new error("Order Not found")
+    throw new Error("Order Not found")
   }
 })
 
 
-module.exports = getOrderById
+ module.exports = getOrderById
+
+// @desc    update order to paid
+// @route   GET /api/orders/:id/pay
+// @access  Private
+
+const updateOrderToPaid = asyncHandler(async (req, res) => {
+
+  const order = await Order.findById(req.params.id)
+
+  if(order){
+      order.isPaid = true,
+      order.paidAt = Date.now(),
+      order.paymentResult = {
+        id: req.body.id,
+        status: req.body.status,
+        update_time: req.body.update_time,
+        email_address: req.body.payer.email_address
+      }
+
+    const updatedOrder = await order.save()
+
+    res.json(updatedOrder)
+
+  } else {
+    res.status(404)
+    throw new Error("Order Not found")
+  }
+})
+
+
+module.exports = updateOrderToPaid
