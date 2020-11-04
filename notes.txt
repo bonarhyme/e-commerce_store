@@ -1,0 +1,4 @@
+1. You use multer for file uploads
+2. You create a folder in the root and call it uploads
+3. You create a file in uploads and call it file.txt
+4. You add the text: Add to git repo
