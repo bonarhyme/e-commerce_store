@@ -4,15 +4,24 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts } from "../actions/productActions"
+import { deleteProduct, listProducts, createProduct } from "../actions/productActions"
+import { PRODUCT_CREATE_RESET } from "../constants/productConstants"
 
-// notice the history, it is as object and used as props
+// notice the history, it is an object and used as props
 const ProductList = ({ history, match }) => {
     const dispatch = useDispatch()
 
-    // Handles users listing
+    // Handles product listing
     const productList = useSelector(state => state.productList)
     const { loading, error, products } = productList
+
+    // Handles productDelete
+    const productDelete = useSelector(state => state.productDelete)
+    const { loading: loadingDelete, error: errorDelete, success: successDelete } = productDelete
+
+    //Handles productCreate
+    const productCreate = useSelector(state => state.productCreate)
+    const { loading: loadingCreate, error: errorCreate, success: successCreate, product: createdProduct } = productCreate
 
     // For security Issues  **The secondLine gets userInfo from the userAction
     const userLogin = useSelector(state => state.userLogin)
@@ -20,22 +29,29 @@ const ProductList = ({ history, match }) => {
 
     // Dispatches users list
     useEffect(() => {
-        // This makes sure that only the users sees userList
-        if (userInfo && userInfo.isAdmin) {
-            dispatch(listProducts())
-        } else {
+        dispatch({ type: PRODUCT_CREATE_RESET })
+        // This makes sure the admin sees it
+        if (!userInfo.isAdmin) {
             history.push("/login")
         }
-        // History and dispatch is used as dependency
-    }, [dispatch, history, userInfo])
+
+        if (successCreate) {
+             history.push(`/admin/product/${createdProduct._id}/edit`)
+        } else {
+            dispatch(listProducts())
+        }
+
+    }, [dispatch, history, userInfo, successCreate, createdProduct, successDelete])
 
     const deleteHandler = (id) => {
-        // if(window.confirm("Are you sure you want to delete this user?"))
-        //Delete Products
+        if (window.confirm("Are you sure you want to delete this Product?")) {
+            dispatch(deleteProduct(id))
+        }
+
     }
 
-    const createProductHandler = (product) => {
-        //Create Product
+    const createProductHandler = () => {
+        dispatch(createProduct())
     }
 
     return (
@@ -50,6 +66,10 @@ const ProductList = ({ history, match }) => {
                     </Button>
                 </Col>
             </Row>
+            {loadingDelete && <Loader />}
+            {errorDelete && <Message variant="danger">{errorDelete}</Message>}
+            {loadingCreate && <Loader />}
+            {errorCreate && <Message variant="danger">{errorCreate}</Message>}
             {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
                 <Table striped bordered hover responsive className="table-sm">
                     <thead>
