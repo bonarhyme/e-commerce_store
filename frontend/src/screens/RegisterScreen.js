@@ -95,7 +95,7 @@ const submitHandler = (e) => {
         <Col>
           Have an Account?{' '}
           <Link to={redirect ? `/login?redirect=${redirect}` : "/login"} >
-            Register
+            Login
           </Link>
         </Col>
       </Row>

@@ -4,16 +4,18 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
+import Paginate from '../components/Paginate'
 import { deleteProduct, listProducts, createProduct } from "../actions/productActions"
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants"
 
 // notice the history, it is an object and used as props
 const ProductList = ({ history, match }) => {
+    const pageNumber = match.params.pageNumber || 1
     const dispatch = useDispatch()
 
     // Handles product listing
     const productList = useSelector(state => state.productList)
-    const { loading, error, products } = productList
+    const { loading, error, products, page, pages } = productList
 
     // Handles productDelete
     const productDelete = useSelector(state => state.productDelete)
@@ -38,10 +40,11 @@ const ProductList = ({ history, match }) => {
         if (successCreate) {
              history.push(`/admin/product/${createdProduct._id}/edit`)
         } else {
-            dispatch(listProducts())
+            //The empty string is for the keyword that is missing.
+            dispatch(listProducts("", pageNumber))
         }
-
-    }, [dispatch, history, userInfo, successCreate, createdProduct, successDelete])
+//These dependency makes an action to be fired anytime and not just once
+    }, [dispatch, history, userInfo, successCreate, createdProduct, successDelete, pageNumber])
 
     const deleteHandler = (id) => {
         if (window.confirm("Are you sure you want to delete this Product?")) {
@@ -71,6 +74,7 @@ const ProductList = ({ history, match }) => {
             {loadingCreate && <Loader />}
             {errorCreate && <Message variant="danger">{errorCreate}</Message>}
             {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
+                <>
                 <Table striped bordered hover responsive className="table-sm">
                     <thead>
                         <tr>
@@ -104,6 +108,8 @@ const ProductList = ({ history, match }) => {
                         ))}
                     </tbody>
                 </Table>
+                    <Paginate pages={pages} page={page} isAdmin={true}/>
+                </>
           )}
         </>
     )

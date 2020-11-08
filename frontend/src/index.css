@@ -43,3 +43,61 @@ h2{
     grid-area: section2;
   }
 }
+
+/* .carousel-item-next,
+.carousel-item-prev,
+.carousel-item.active {
+  display: flex;
+  height: 20rem;
+}
+
+.carousel-caption{
+  position: absolute;
+  top: 0;
+}
+
+.carousel img{
+  max-height: 500px;
+  margin: 0 auto;
+  padding: 0 auto;
+}
+
+.carousel a{
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 469px){
+  .carousel-caption{
+    position: absolute;
+    top: 0;
+  }
+  .carousel-item-next,
+  .carousel-item-prev,
+  .carousel-item.active {
+    display: flex;
+    height: 25rem;
+  }
+} */
+.carousel-caption h2{
+  font-size:20px;
+  background-color: white;
+  opacity: 0.5;
+}
+
+.carousel img{
+  margin: 0 auto;
+  padding: 0 auto;
+}
+@media screen and (max-width: 468px){
+.carousel-caption{
+  position: absolute;
+  top: 0;
+}
+  .carousel-caption{
+    position: absolute;
+    top: 0;
+  }
+  .carousel h2{
+    font-size: 10px;
+  }
+}

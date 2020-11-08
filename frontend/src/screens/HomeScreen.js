@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react'
+import { Link } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { Row, Col } from "react-bootstrap"
 import Product from "../components/Product"
 import Message from "../components/Message"
 import Loader from "../components/Loader"
 import Paginate from "../components/Paginate"
-import { listProducts } from "../actions/productActions"
+import Meta from "../components/Meta"
 
+
+
+import { listProducts } from "../actions/productActions"
+import ProductCarousel from '../components/ProductCarousel'
 
 const HomeScreen = ({ match }) => {
     const keyword = match.params.keyword
@@ -20,12 +25,25 @@ const HomeScreen = ({ match }) => {
 
     useEffect(() => {
         dispatch(listProducts(keyword, pageNumber))
-    }, [dispatch, keyword, pageNumber, page, pages])
+    }, [dispatch, keyword, pageNumber])
 
     return (
         <>
+            <Meta title="This is it" />
+            <Row>
+                <Col md={6}>
+                    {!keyword ? <ProductCarousel /> : <Link to="/" className="btn btn-light">Go Back</Link>}
+                </Col>
+                <Col md={3}>
+                    <p>LIsts for some stuff</p>
+                </Col>
+                <Col md={3}>
+                    <p>Some other things</p>
+                </Col>
+            </Row>
+
             <h1>Latest Products</h1>
-            {loading ? <Loader /> : error ? <Message variant="danger">{error}</Message> : (
+            {loading ? <Loader /> : error ? <Message variant="danger">Network connection weak or unavailable to load products</Message> : (
             <>
                 <Row>
                     {products && products.length && products.map(product => (

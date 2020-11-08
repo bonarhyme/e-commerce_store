@@ -6,7 +6,7 @@ const asyncHandler = require("express-async-handler")
 //this a public routes
 const getProducts = asyncHandler(async (req, res) => {
     //use page size to display the number of item on a page...or pagination
-    const pageSize = 2
+    const pageSize = 10
     const page = Number(req.query.pageNumber) || 1
 
     const keyword = req.query.keyword ? {
@@ -18,7 +18,7 @@ const getProducts = asyncHandler(async (req, res) => {
 
     const count = await Product.countDocuments({ ...keyword })
     const products = await Product.find({ ...keyword }).limit(pageSize).skip(pageSize * (page - 1))
-    res.json({ products, page, pages: Math.ceil(count / pageSize) })
+    res.json({products, page, pages: Math.ceil(count / pageSize)})
 })
 
 //description: This fetches single product
@@ -140,4 +140,12 @@ const createProductReview = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = {getProducts, getProductById, deleteProduct, createProduct, updateProduct, createProductReview}
+//description: This gets top rated products
+//the routes are GET request /api/products/top
+//this a public routes
+const getTopProducts = async (req, res) => {
+    const products = await Product.find({})
+    res.json(products)
+}
+
+module.exports = {getProducts, getProductById, deleteProduct, createProduct, updateProduct, createProductReview, getTopProducts}
