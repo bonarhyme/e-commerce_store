@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from "react-redux"
 import { Row, Col } from "react-bootstrap"
 import Product from "../components/Product"
 import Message from "../components/Message"
-import Loader from "../components/Loader"
 import Paginate from "../components/Paginate"
 import Meta from "../components/Meta"
-
-
-
 import { listProducts } from "../actions/productActions"
 import ProductCarousel from '../components/ProductCarousel'
+import LoaderPlane from '../components/LoaderPlane'
 
 const HomeScreen = ({ match }) => {
     const keyword = match.params.keyword
@@ -43,7 +40,7 @@ const HomeScreen = ({ match }) => {
             </Row>
 
             <h1>Latest Products</h1>
-            {loading ? <Loader /> : error ? <Message variant="danger">Network connection weak or unavailable to load products</Message> : (
+            {loading ? <LoaderPlane /> : error ? <Message variant="danger">Network connection weak or unavailable to load products</Message> : (
             <>
                 <Row>
                     {products && products.length && products.map(product => (

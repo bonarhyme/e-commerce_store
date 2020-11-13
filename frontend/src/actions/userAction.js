@@ -123,6 +123,12 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
             type: USER_UPDATE_PROFILE_SUCCESS,
             payload: data
         })
+        // This updates the navbar name
+        dispatch({
+            type: USER_LOGIN_SUCCESS,
+            payload: data
+        })
+        localStorage.setItem("userInfo", JSON.stringify(data))
 
     } catch (error) {
         dispatch({
@@ -221,6 +227,8 @@ export const updateUser = (user) => async (dispatch, getState) => {
             payload: data
         })
 
+        dispatch({ type: USER_DETAILS_RESET })
+
     } catch (error) {
         dispatch({
             type: USER_UPDATE_FAIL,
@@ -231,8 +239,13 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
 export const logout = () => (dispatch) => {
     localStorage.removeItem("userInfo")
+    localStorage.removeItem('cartItems')
+    localStorage.removeItem('shippingAddress')
+    localStorage.removeItem('paymentMethod')
     dispatch({ type: USER_LOGOUT })
     dispatch({ type: USER_DETAILS_RESET })
     dispatch({ type: ORDER_LIST_MY_RESET })
     dispatch({ type: USER_LIST_RESET })
+    // This redirects the user on logout
+    document.location.href = '/login'
 }

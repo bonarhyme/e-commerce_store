@@ -33,6 +33,9 @@ app.use("/api/orders", orderRoutes)
 //Paypal get client ID
 app.get("/api/config/paypal", (req, res) => res.send(process.env.PAYPAL_CLIENT_ID))
 
+//Paystack get public key
+app.get("/api/config/paystack", (req, res) => res.send(process.env.PAYSTACK_PUBLIC_KEY))
+
 //Upload route
 app.use("/api/upload", uploadRoutes)
 

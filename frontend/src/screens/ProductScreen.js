@@ -25,17 +25,18 @@ const ProductScreen = ({ history, match }) => {
     const { userInfo } = userLogin
 
     const productReviewCreate = useSelector(state => state.productReviewCreate)
-    const {success: successProductReview, error: errorProductReview } = productReviewCreate
+    const {success: successProductReview, error: errorProductReview, loading: loadingProductReview, } = productReviewCreate
 
     useEffect(() => {
         if(successProductReview){
-            alert("Review Submitted!")
             setRating(0)
             setComment("")
             dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
         }
-        dispatch(listProductDetails(match.params.id))
-    }, [dispatch, match, successProductReview])
+        if (!product._id || product._id !== match.params.id) {
+            dispatch(listProductDetails(match.params.id))
+        }
+    }, [dispatch, match, successProductReview, product._id])
 
     const addToCartHandler = () => {
         history.push(`/cart/${match.params.id}?qty=${qty}`)
@@ -69,7 +70,7 @@ const ProductScreen = ({ history, match }) => {
                       <Rating value={product.rating} text={`${product.numReviews} reviews`} />
                         </ListGroupItem>
                         <ListGroupItem>
-                            Price: ${product.price}
+                            Price: NGN{product.price}
                         </ListGroupItem>
                     <ListGroupItem>
                         Description: {product.description}
@@ -85,7 +86,7 @@ const ProductScreen = ({ history, match }) => {
                                         </Col>
                                         <Col>
                                             <strong>
-                                                ${product.price}
+                                                NGN{product.price}
                                             </strong>
                                         </Col>
                                     </Row>
@@ -143,6 +144,12 @@ const ProductScreen = ({ history, match }) => {
                                     </ListGroup.Item>
                                 ))}
                                 <h2>Write a Customer Review</h2>
+                                  {successProductReview && (
+                                    <Message variant='success'>
+                                      Review submitted successfully
+                                    </Message>
+                                  )}
+                                  {loadingProductReview && <Loader />}
                                 {errorProductReview && <Message variant="danger">{errorProductReview}</Message>}
                                 {userInfo ? (<Form onSubmit={submitHandler}>
                                     <Form.Group controlId="rating">
@@ -152,16 +159,16 @@ const ProductScreen = ({ history, match }) => {
                                             <option value="1">1 - Poor</option>
                                             <option value="2">2 - Fair</option>
                                             <option value="3">3 - Good</option>
-                                            <option value="4">1 - Ver Good</option>
-                                            <option value="5">1 - Excellent</option>
+                                            <option value="4">4 - Ver Good</option>
+                                            <option value="5">5 - Excellent</option>
                                         </Form.Control>
                                     </Form.Group>
-                                    <Form.Group contolId="comment">
+                                    <Form.Group controlId="comment">
                                         <Form.Label>Comment</Form.Label>
                                         <Form.Control as="textarea" row="4" value={comment} onChange={(e) => setComment(e.target.value)}>
                                         </Form.Control>
                                     </Form.Group>
-                                    <Button type="submit" variant="primary">Submit</Button>
+                                    <Button type="submit" variant="primary" disabled={loadingProductReview}>Submit</Button>
                                 </Form>) : <Message>Please <Link to="/login">Sign in</Link> to write a review</Message>}
                             </ListGroup>
                     </Col>

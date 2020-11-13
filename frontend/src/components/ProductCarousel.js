@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { Link } from "react-router-dom"
 import { Image, Carousel } from "react-bootstrap"
-import Loader from "./Loader"
 import Message from "./Message"
 import { listTopProducts } from "../actions/productActions"
 import { useDispatch, useSelector } from 'react-redux'
+import LoaderBricks from './LoaderBricks'
 
 const ProductCarousel = () => {
     const dispatch = useDispatch()
@@ -17,7 +17,7 @@ const ProductCarousel = () => {
     }, [dispatch])
 
 
-    return loading ? <Loader /> : error ? (<Message variant= "danger" >Network connection weak or unavailable to load products</Message>) : (
+    return loading ? <LoaderBricks /> : error ? (<Message variant= "danger" >Network connection weak or unavailable to load products</Message>) : (
         <Carousel pause="hover" className="bg-dark w-100">
             {products && products.length && products.map(product => (
                 <Carousel.Item key={product._id}>

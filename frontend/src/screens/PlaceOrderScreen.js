@@ -5,11 +5,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import Message from "../components/Message"
 import CheckoutSteps from '../components/CheckoutSteps'
 import { createOrder } from "../actions/orderActions"
+import { ORDER_CREATE_RESET } from '../constants/orderConstants'
+import { USER_DETAILS_RESET } from '../constants/userConstants'
 
 const PlaceOrderScreen = ({ history }) => {
     const dispatch = useDispatch()
 
     const cart = useSelector(state => state.cart)
+
+      if (!cart.shippingAddress.address) {
+        history.push('/shipping')
+      } else if (!cart.paymentMethod) {
+        history.push('/payment')
+      }
 
     //Calculate Prices
     const addDecimals = (num) => {
@@ -17,9 +25,10 @@ const PlaceOrderScreen = ({ history }) => {
     }
     cart.itemsPrice = addDecimals(cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0))
 
-    cart.shippingPrice = addDecimals( (cart.ItemsPrice > 100 ? 0 : 100))
+    cart.shippingPrice = addDecimals( (cart.ItemsPrice > 1000 ? 0 : 1000))
 
-    cart.taxPrice = addDecimals(Number(0.15 * cart.itemsPrice))
+    // cart.taxPrice = addDecimals(Number(0.15 * cart.itemsPrice))
+    cart.taxPrice = 0
 
     cart.totalPrice = addDecimals(Number(cart.itemsPrice) + Number(cart.shippingPrice) + Number(cart.taxPrice))
 
@@ -29,6 +38,8 @@ const PlaceOrderScreen = ({ history }) => {
     useEffect(() => {
         if (success) {
             history.push(`/order/${order._id}`)
+            dispatch({ type: ORDER_CREATE_RESET })
+            dispatch({ type: USER_DETAILS_RESET })
         }
         // eslint-disable-next-line
     }, [history, success])
@@ -103,13 +114,13 @@ const PlaceOrderScreen = ({ history }) => {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Items</Col>
-                                    <Col>${cart.itemsPrice}</Col>
+                                    <Col>NGN{cart.itemsPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Shipping</Col>
-                                    <Col>${cart.shippingPrice}</Col>
+                                    <Col>NGN{cart.shippingPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
@@ -121,7 +132,7 @@ const PlaceOrderScreen = ({ history }) => {
                             <ListGroup.Item>
                                 <Row>
                                     <Col>Total</Col>
-                                    <Col>${cart.totalPrice}</Col>
+                                    <Col>NGN{cart.totalPrice}</Col>
                                 </Row>
                             </ListGroup.Item>
                             <ListGroup.Item>
