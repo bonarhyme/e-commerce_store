@@ -84,7 +84,6 @@ const OrderScreen = ({ match, history }) => {
     const onClose = () => {
       // implementation for  whatever you want to do when the Paystack dialog closed.
       alert("Hello valued Customer, Please Don't go away!!!")
-      console.log('closed')
     }
     const PaystackHook = () => {
       const initializePayment = usePaystackPayment(config);
